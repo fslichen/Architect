@@ -48,6 +48,12 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 public class Sender {
+	public static final Gson gson = new Gson();
+	
+	public <T> T toPojo(Object object, Class<T> clazz) {
+		return gson.fromJson(gson.toJson(object), clazz);
+	}
+	
 	public static Future<String> asynchronousSend(String url) {
 		return asynchronousSend(url, null, null);
 	}
