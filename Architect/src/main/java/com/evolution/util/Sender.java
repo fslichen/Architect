@@ -50,7 +50,7 @@ import com.google.gson.reflect.TypeToken;
 public class Sender {
 	public static final Gson gson = new Gson();
 	
-	public <T> T toPojo(Object object, Class<T> clazz) {
+	public static <T> T toPojo(Object object, Class<T> clazz) {
 		return gson.fromJson(gson.toJson(object), clazz);
 	}
 	
