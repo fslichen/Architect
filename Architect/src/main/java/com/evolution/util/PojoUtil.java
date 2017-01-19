@@ -17,14 +17,14 @@ public class PojoUtil {
 				field.setAccessible(true);
 				if (field.get(object) == null) {
 					System.out.println("The field " + fieldName + " is null.");
-					return false;
+					return true;
 				}
 			} catch (Exception e) {
-				e.printStackTrace();
-				return false;
+				System.out.println("The field " + fieldName + " does not exist.");
+				return true;
 			}
 		}
-		return true;
+		return false;
 	}
 	
 	public void patch(Object oldObject, Object newObject) {

@@ -34,6 +34,6 @@ public class PojoUtilTest {
 		LoginInfo info = new LoginInfo();
 		info.setHost("");
 		info.setPort(12);
-		System.out.println(PojoUtil.nullValueExists(info, "host", "port", "password"));
+		System.out.println(PojoUtil.nullValueExists(info, "bb", "host", "port", "password"));
 	}
 }
