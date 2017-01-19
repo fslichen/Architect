@@ -9,6 +9,24 @@ import java.util.Map;
 import com.google.gson.Gson;
 
 public class PojoUtil {
+	public static Boolean nullValueExists(Object object, String... fieldNames) {
+		Class<? extends Object> clazz = object.getClass();
+		for (String fieldName : fieldNames) {
+			try {
+				Field field = clazz.getDeclaredField(fieldName);
+				field.setAccessible(true);
+				if (field.get(object) == null) {
+					System.out.println("The field " + fieldName + " is null.");
+					return false;
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+				return false;
+			}
+		}
+		return true;
+	}
+	
 	public void patch(Object oldObject, Object newObject) {
 		try {
 			Field[] fields = oldObject.getClass().getDeclaredFields();
