@@ -26,12 +26,14 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
+import org.apache.http.HttpHost;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPatch;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.utils.URIBuilder;
+import org.apache.http.conn.params.ConnRoutePNames;
 import org.apache.http.conn.scheme.Scheme;
 import org.apache.http.conn.scheme.SchemeRegistry;
 import org.apache.http.conn.ssl.SSLSocketFactory;
@@ -427,6 +429,19 @@ public class Sender {
 			return toString(HttpClients.createDefault().execute(httpPost).getEntity().getContent());
 		} catch (Exception e) {
 			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	public static String uploadBinary(String url, Map<String, String> parameters, String filename, InputStream inputStream) {
+		try {
+			// The internet traffic will be detected by fiddler.
+			HttpPost httpPost = new HttpPost(encodeUrl(url + getRequestParameters(parameters)));
+			HttpHost proxy = new HttpHost("127.0.0.1", 8888);
+			httpPost.getParams().setParameter(ConnRoutePNames.DEFAULT_PROXY, proxy);
+			httpPost.setEntity(MultipartEntityBuilder.create().addTextBody("fileName", filename, ContentType.APPLICATION_OCTET_STREAM).addBinaryBody("file", inputStream, FileUtil.getContentType(filename), filename).build());
+			return toString(HttpClients.createDefault().execute(httpPost).getEntity().getContent());
+		} catch (Exception e) {
 			return null;
 		}
 	}
