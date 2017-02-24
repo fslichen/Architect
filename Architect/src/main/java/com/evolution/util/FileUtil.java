@@ -3,6 +3,7 @@ package com.evolution.util;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -11,7 +12,10 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Scanner;
+import java.util.UUID;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -225,6 +229,40 @@ public class FileUtil {
 			zipInputStream.close();
 		} catch(IOException e) {
 			e.printStackTrace();
+		}
+	}
+	
+	public static File createFileByStrings(String fileType, String... strings) {
+		File file = null;
+		try {
+			file = File.createTempFile(UUID.randomUUID().toString(), "." + fileType);// By providing an file extension, the file will not be stored as tmp file. 
+			FileWriter fileWriter = new FileWriter(file);
+			for (String string : strings) {
+				fileWriter.write(string);
+				fileWriter.write("\n");
+			}
+			fileWriter.close();
+			return file;
+		} catch (IOException e) {
+			e.printStackTrace();
+			return file;
+		}
+	}
+	
+	public static File createFileByMapKeys(String fileType, Map<? extends Object, ? extends Object> map) {
+		File file = null;
+		try {
+			file = File.createTempFile(UUID.randomUUID().toString(), "." + fileType);// By providing an file extension, the file will not be stored as tmp file.
+			FileWriter fileWriter = new FileWriter(file);
+			for (Entry<? extends Object, ? extends Object> entry : map.entrySet()) {
+				fileWriter.write(entry.getKey().toString());
+				fileWriter.write("\n");
+			}
+			fileWriter.close();
+			return file;
+		} catch (IOException e) {
+			e.printStackTrace();
+			return file;
 		}
 	}
 }
